@@ -1,0 +1,216 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===========================
+   FRUTIGER AERO STYLE INDEX.CSS
+   =========================== */
+
+@layer base {
+  :root {
+    /* -------------------------
+       Color Palette (Frutiger Aero Inspired)
+       ------------------------- */
+    --gradient-1: 215 85% 28%;  /* Royal Blue */
+    --gradient-2: 190 82% 40%;  /* Aqua / Turquoise */
+    --gradient-3: 175 80% 50%;  /* Soft Mint */
+    --gradient-4: 260 70% 36%;  /* Subtle Violet */
+    --gradient-soft: linear-gradient(145deg, hsl(var(--gradient-1) / 0.9), hsl(var(--gradient-2) / 0.85));
+    --gradient-primary: linear-gradient(135deg, hsl(var(--gradient-2)) 0%, hsl(var(--gradient-3)) 100%);
+    --glass-gradient: linear-gradient(180deg, hsla(0,0%,100%,0.08), hsla(0,0%,100%,0.02));
+
+    --fg: 220 15% 14%;
+    --bg: 220 24% 12%;
+    --card: 220 24% 16%;
+    --card-foreground: 220 12% 96%;
+    --muted: 220 20% 14%;
+    --muted-foreground: 220 12% 70%;
+    --border: 220 20% 20%;
+    --input: 220 20% 20%;
+    --ring: 190 80% 50%;
+
+    /* Motion + Radius */
+    --radius-sm: 0.5rem;
+    --radius: 0.9rem;
+    --radius-lg: 1.6rem;
+    --transition-fast: 0.15s ease-in-out;
+    --transition-base: 0.32s cubic-bezier(.4,0,.2,1);
+    --transition-slow: 0.6s cubic-bezier(.4,0,.2,1);
+
+    /* Shadows */
+    --shadow-sm: 0 2px 8px hsla(220, 15%, 10%, 0.06);
+    --shadow-md: 0 6px 20px hsla(220, 15%, 10%, 0.08);
+    --shadow-lg: 0 12px 40px hsla(220, 15%, 10%, 0.12);
+    --shadow-focus: 0 0 0 4px hsla(var(--ring) / 0.22);
+  }
+
+  /* Dark mode auto */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: 220 24% 8%;
+      --fg: 220 12% 96%;
+      --card: 220 24% 12%;
+      --card-foreground: 220 12% 96%;
+      --muted: 220 20% 14%;
+      --muted-foreground: 220 12% 70%;
+      --border: 220 20% 20%;
+      --input: 220 20% 20%;
+      --ring: 190 80% 55%;
+    }
+  }
+
+  body {
+    min-height: 100vh;
+    font-family: "Frutiger", "Inter", ui-sans-serif, system-ui;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+    color: hsl(var(--fg));
+    background: linear-gradient(
+      135deg,
+      hsl(var(--gradient-1)) 0%,
+      hsl(var(--gradient-2)) 35%,
+      hsl(var(--gradient-3)) 70%,
+      hsl(var(--gradient-4)) 100%
+    );
+    transition: background var(--transition-base), color var(--transition-base);
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+    border-radius: var(--radius-sm);
+  }
+}
+
+/* -------------------------
+   GLASSY CARD BASE
+   ------------------------- */
+@layer components {
+  .glass-card {
+    background: hsl(var(--card) / 0.35);
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    border-radius: var(--radius-lg);
+    border: 1px solid hsl(var(--border) / 0.3);
+    color: hsl(var(--card-foreground));
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+  }
+  .glass-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+/* -------------------------
+   BUTTONS (FRUTIGER AERO STYLE)
+   ------------------------- */
+@layer components {
+  .btn {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    padding: 0.5rem 1.2rem;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.25s ease;
+  }
+  .btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md);
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+}
+
+/* -------------------------
+   HERO SECTION
+   ------------------------- */
+@layer components {
+  .hero {
+    position: relative;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: clamp(2rem, 6vw, 5rem);
+    min-height: 65vh;
+    border-radius: var(--radius-lg);
+    background: var(--glass-gradient);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+  }
+  .hero-visual {
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-soft);
+    opacity: 0.9;
+    transform: scale(1);
+    transition: transform var(--transition-slow);
+  }
+  .hero:hover .hero-visual {
+    transform: scale(1.04);
+  }
+}
+
+/* -------------------------
+   TABLE (Responsive Aero Style)
+   ------------------------- */
+@layer components {
+  .list-table-format {
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 0.5fr;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border: 1px solid hsl(var(--border));
+    font-size: 14px;
+    border-radius: var(--radius-sm);
+    background: hsl(var(--card) / 0.4);
+    box-shadow: var(--shadow-sm);
+  }
+
+  @media (max-width: 992px) {
+    .list-table-format {
+      grid-template-columns: 1fr 2fr 1fr 1fr;
+      font-size: 13px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .list-table-format {
+      grid-template-columns: 1fr;
+      font-size: 12px;
+      gap: 6px;
+      text-align: left;
+    }
+    .list-table-format > *::before {
+      content: attr(data-label);
+      font-weight: 700;
+      display: block;
+      margin-bottom: 2px;
+      color: hsl(var(--muted-foreground));
+    }
+  }
+}
+
+/* -------------------------
+   MICRO INTERACTIONS
+   ------------------------- */
+@layer components {
+  .btn, .glass-card {
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    will-change: transform;
+  }
+  .btn:hover, .glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .btn:active, .glass-card:active {
+    transform: scale(0.97);
+  }
+}

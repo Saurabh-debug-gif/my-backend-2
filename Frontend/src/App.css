@@ -1,0 +1,157 @@
+/* ---------- ROOT & LAYOUT ---------- */
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  font-family: 'Inter', sans-serif; /* modern clean font */
+  background: linear-gradient(135deg, #f8f9fb 0%, #ffffff 100%);
+  color: #1f1f1f;
+}
+
+/* ---------- LOGO ---------- */
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+/* Hover: glow + scale */
+.logo:hover {
+  transform: scale(1.12);
+  box-shadow: 0 10px 30px rgba(100, 108, 255, 0.3);
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+/* React logo special hover */
+.logo.react:hover {
+  transform: scale(1.18);
+  box-shadow: 0 12px 35px rgba(97, 218, 251, 0.35);
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+/* Subtle spin animation for visual engagement */
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin 20s linear infinite;
+  }
+}
+
+/* ---------- CARD DESIGN ---------- */
+.card {
+  padding: 2em;
+  background: #ffffff;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Card hover effect */
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* ---------- TEXT & LINKS ---------- */
+.read-the-docs {
+  color: #6b6b6b;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.read-the-docs:hover {
+  color: #646cff; /* subtle brand highlight */
+  text-decoration: underline;
+}
+
+/* ---------- RESPONSIVENESS ---------- */
+@media (max-width: 1024px) {
+  #root {
+    padding: 1.5rem;
+  }
+
+  .logo {
+    height: 6.5em;
+    padding: 1rem;
+  }
+
+  .card {
+    padding: 1.5em;
+  }
+}
+
+@media (max-width: 768px) {
+  #root {
+    padding: 1rem;
+  }
+
+  .logo {
+    height: 5.5em;
+    padding: 0.8em;
+  }
+
+  .card {
+    padding: 1em;
+  }
+}
+
+@media (max-width: 480px) {
+  #root {
+    padding: 0.8rem;
+  }
+
+  .logo {
+    height: 4.5em;
+    padding: 0.6em;
+  }
+
+  .card {
+    padding: 0.8em;
+  }
+
+  .read-the-docs {
+    font-size: 0.85rem;
+  }
+}
+
+/* ---------- PREMIUM TOUCHES ---------- */
+/* subtle gradient buttons, modern typography, and smooth shadows */
+button, .btn {
+  padding: 0.8em 1.8em;
+  border-radius: 1rem;
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  background: linear-gradient(135deg, #646cff, #61dafb);
+  color: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+button:hover, .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(100, 108, 255, 0.4);
+}

@@ -1,0 +1,156 @@
+.header {
+  height: 34vw;
+  margin: 30px auto;
+  background: url('/header_img.png') no-repeat center;
+  background-size: cover;
+  border-radius: 20px;
+  position: relative;
+  box-shadow: 0px 10px 28px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  animation: fadeInHeader 1.2s ease-in-out;
+}
+
+/* Smooth overlay with animated gradient */
+.header::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.35),
+    rgba(255, 255, 255, 0.15)
+  );
+  z-index: 1;
+  animation: overlayMove 6s infinite alternate ease-in-out;
+}
+
+/* Header text & content */
+.header-contents {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: absolute;
+  gap: 1.5vw;
+  max-width: 55%;
+  bottom: 12%;
+  left: 6vw;
+  z-index: 2;
+  animation: slideUp 1.4s ease forwards;
+}
+
+/* Heading */
+.header-contents h2 {
+  font-weight: 800;
+  color: #222;
+  font-size: max(3.8vw, 28px);
+  line-height: 1.2;
+  margin: 0;
+  text-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+  letter-spacing: 0.5px;
+  animation: textFade 2s ease-in-out;
+}
+
+/* Paragraph */
+.header-contents p {
+  color: #333;
+  font-size: max(1.3vw, 15px);
+  line-height: 1.7;
+  margin: 0;
+  font-weight: 400;
+  animation: textFade 2.2s ease-in-out;
+}
+
+/* Call-to-action button */
+.header-contents button {
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 0.9vw 2.3vw;
+  background: linear-gradient(135deg, #43a047, #2e7d32);
+  font-size: max(1vw, 14px);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.35s ease-in-out;
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.18);
+  letter-spacing: 0.4px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Button hover glow + ripple */
+.header-contents button:hover {
+  background: linear-gradient(135deg, #4caf50, #1b5e20);
+  transform: translateY(-4px) scale(1.06);
+  box-shadow: 0px 8px 22px rgba(67, 160, 71, 0.45);
+}
+
+.header-contents button::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  top: 50%;
+  left: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+  z-index: 0;
+}
+
+.header-contents button:hover::after {
+  width: 260%;
+  height: 260%;
+}
+
+/* Keyframes */
+@keyframes fadeInHeader {
+  from { opacity: 0; transform: scale(1.05); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes overlayMove {
+  from { background-position: left top; }
+  to   { background-position: right bottom; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes textFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 1050px) {
+  .header {
+    height: 38vw;
+  }
+  
+  .header-contents {
+    max-width: 45%;
+    
+  }
+
+}
+@media (max-width:750px) {
+  .header-contents{
+    max-width:55%;
+  }
+  .header-contents p{
+    display: none;
+
+  }
+  .header-contents p {
+    display: none;
+
+  }
+  .header-contents button{
+    padding: 2vw 4vw;
+    
+  }
+}

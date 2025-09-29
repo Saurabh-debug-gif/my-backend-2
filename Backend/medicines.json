@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Medicine 1",
+    "description": "Description for Medicine 1",
+    "price": 100,
+    "category": "Antibiotics",
+    "image": ""
+  },
+  {
+    "name": "Medicine 2",
+    "description": "Description for Medicine 2",
+    "price": 50000,
+    "category": "Antihistamines",
+    "image": ""
+  }
+]

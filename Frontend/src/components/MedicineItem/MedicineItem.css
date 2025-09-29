@@ -1,0 +1,187 @@
+/* ===============================
+   MEDICINE ITEM – FRUTIGER AERO STYLE
+   =============================== */
+
+.medicine-section {
+  padding: clamp(2rem, 6vw, 5rem);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  max-width: 1600px;
+  margin: auto;
+}
+
+/* ---------- Card ---------- */
+.medicine-item-card {
+  background: rgba(30, 30, 40, 0.85); /* slightly darker glassy */
+  backdrop-filter: blur(18px) saturate(180%);
+  color: #fff; /* make text visible */
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.32s cubic-bezier(.4,0,.2,1), box-shadow 0.32s cubic-bezier(.4,0,.2,1);
+}
+
+.medicine-item-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+/* ---------- Image container ---------- */
+.medicine-item-img-container {
+  width: 100%;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    hsl(var(--gradient-1) / 0.12),
+    hsl(var(--gradient-2) / 0.12)
+  );
+  overflow: hidden;
+  position: relative;
+  border-bottom-left-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
+}
+
+.medicine-item-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform var(--transition-slow);
+}
+
+.medicine-item-card:hover .medicine-item-img {
+  transform: scale(1.04);
+}
+
+/* ---------- Add to cart button ---------- */
+.add-button {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: 42px;
+  height: 42px;
+  cursor: pointer;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  z-index: 2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.25s ease;
+}
+
+.add-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.1);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* ---------- Quantity controls ---------- */
+.medicine-item-add {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  color: #fff;
+  font-weight: 600;
+  z-index: 2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.25s ease;
+}
+
+.medicine-item-add button {
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 18px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.medicine-item-add button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.2);
+}
+
+.medicine-item-add span {
+  font-size: 15px;
+  min-width: 28px;
+  text-align: center;
+}
+
+/* ---------- Details ---------- */
+.medicine-item-details {
+  padding: 1.2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  background: rgba(0, 0, 0, 0.25); /* dark overlay */
+  border-radius: var(--radius-sm);
+  color: #fff; /* bright text */
+}
+
+.medicine-item-name-rating {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.medicine-item-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #cacaca;
+}
+
+.medicine-item-rating img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.medicine-item-desc {
+  font-size: 14px;
+  color: hsl(var(--muted-foreground));
+  margin: 8px 0 12px;
+  flex-grow: 1;
+}
+
+.medicine-item-price-section {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.medicine-item-price {
+  font-size: 17px;
+  font-weight: 700;
+  color: hsl(var(--gradient-3));
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .medicine-section {
+    padding: 2rem 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+}

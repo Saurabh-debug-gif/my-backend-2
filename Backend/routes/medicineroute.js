@@ -2,7 +2,8 @@
 import express from "express";
 import multer from "multer";
 import fs from "fs";
-import Medicine from "../models/medicinemodel.js";
+import medicineModel from "../models/medicineModel.js";
+
 
 const medicineRouter = express.Router();
 

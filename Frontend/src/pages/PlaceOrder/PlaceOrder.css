@@ -122,3 +122,14 @@
     width: 100%;
   }
 }
+.order-items {
+  margin: 10px 0;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between; /* product left, price right */
+  padding: 4px 0;
+  border-bottom: 1px solid #eee; /* optional separator */
+  font-size: 14px;
+}

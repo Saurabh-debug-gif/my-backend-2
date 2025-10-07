@@ -1,12 +1,12 @@
 import express from "express";
 import { addToCart, getCart, removeFromCart } from "../controllers/cartController.js";
-import authMiddleware from "../middleware/authMiddleware.js"; // ✅ match filename
+import authMiddleware from "../middleware/auth.js";
 
-const router = express.Router();
+const cartRouter = express.Router();
 
-// 🛒 Cart Routes (all protected with auth)
-router.post("/get", authMiddleware, getCart);
-router.post("/add", authMiddleware, addToCart);
-router.post("/remove", authMiddleware, removeFromCart);
+// ---------------- Cart Routes ----------------
+cartRouter.post("/add", authMiddleware, addToCart);
+cartRouter.post("/remove", authMiddleware, removeFromCart);
+cartRouter.post("/get", authMiddleware, getCart);
 
-export default router;
+export default cartRouter;

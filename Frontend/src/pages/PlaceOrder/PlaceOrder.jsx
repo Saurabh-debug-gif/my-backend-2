@@ -1,29 +1,23 @@
-// src/pages/PlaceOrder/PlaceOrder.jsx
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./PlaceOrder.css";
 import { StoreContext } from "../../components/Context/StoreContext";
+import { medicine_list } from "../../assets/assets";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { load } from "@cashfreepayments/cashfree-js";
 
 const PlaceOrder = () => {
   const {
     cartItems,
-    medicineList,
-    getTotalCartAmount,
-    clearCart,
     token,
     url,
     currency,
     deliveryCharge,
+    clearCart,
   } = useContext(StoreContext);
 
   const navigate = useNavigate();
 
-  // Totals
-  const subtotal = getTotalCartAmount();
-  const total = subtotal === 0 ? 0 : subtotal + deliveryCharge;
-
-  // Delivery form state
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -36,195 +30,250 @@ const PlaceOrder = () => {
     phone: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
+  // --------------------------
+  // Compute subtotal & total
+  // --------------------------
+  const subtotal = (medicine_list || []).reduce(
+    (total, med) => total + (cartItems[med._id] || 0) * med.price,
+    0
+  );
+  const total = subtotal + (subtotal ? Number(deliveryCharge) : 0);
+
+  // --------------------------
+  // Calculate total cart amount
+  // --------------------------
+  const getTotalCartAmount = () => subtotal;
+
+  // --------------------------
+  // Redirect if not logged in or cart empty
+  // --------------------------
+  useEffect(() => {
+    if (!token || getTotalCartAmount() === 0) {
+      navigate("/cart");
+    }
+  }, [token, cartItems, navigate]);
+
+  // --------------------------
   // Handle input changes
+  // --------------------------
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle submit
+  // --------------------------
+  // Handle order submission
+  // --------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!token) return alert("⚠️ You must be logged in!");
+    if (!subtotal) return alert("🛒 Your cart is empty!");
 
-    if (subtotal === 0) {
-      alert("Your cart is empty!");
-      return;
-    }
+    setLoading(true);
 
     try {
-      // ✅ Build order items strictly from medicineList
-      const items = medicineList
-        .filter((med) => cartItems[med._id] > 0)
-        .map((med) => ({
-          id: med._id,
-          name: med.name,
-          price: med.price,
-          quantity: cartItems[med._id],
-          total: med.price * cartItems[med._id],
-        }));
+      // Prepare items
+      const items = Object.keys(cartItems)
+        .filter((id) => cartItems[id] > 0)
+        .map((id) => {
+          const med = medicine_list.find((m) => m._id === id);
+          return {
+            productId: id,
+            name: med?.name || "Unknown",
+            price: med?.price || 0,
+            quantity: cartItems[id],
+          };
+        });
 
-      const orderData = {
-        items,
-        amount: total,
-        address: formData,
-      };
+      // Step 1: Place order
+      const { data } = await axios.post(
+        `${url}/api/orders/place`,
+        { items, amount: total, address: formData },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-      const res = await axios.post(`${url}/api/order/place`, orderData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (res.data.success) {
-        window.location.href = res.data.session_url; // Stripe checkout
-      } else {
-        alert("❌ Failed to place order. Try again!");
+      if (!data.success) {
+        alert("❌ Failed to create order. Please try again.");
+        setLoading(false);
+        return;
       }
+
+      const { paymentSessionId, session_url, paymentUrl } = data;
+
+      // Step 2: Cashfree payment
+      if (paymentSessionId) {
+        try {
+          const cashfree = await load({ mode: "sandbox" }); // change to "production" later
+          if (!cashfree) {
+            alert("Cashfree SDK not loaded properly!");
+            setLoading(false);
+            return;
+          }
+
+          const result = await cashfree.checkout({
+            paymentSessionId,
+            redirectTarget: "_blank",
+          });
+
+          if (result.redirect === true) {
+            console.log("Redirecting to Cashfree...");
+          } else {
+            console.error("Cashfree checkout failed:", result);
+            alert("Payment could not be initiated. Try again.");
+          }
+        } catch (err) {
+          console.error("Cashfree SDK error:", err);
+          alert("Payment could not be initiated. Try again.");
+          setLoading(false);
+          return;
+        }
+      } else if (session_url || paymentUrl) {
+        window.location.href = session_url || paymentUrl;
+        return;
+      }
+
+      // Step 3: Success fallback
+      clearCart();
+      alert("🎉 Order placed successfully!");
+      navigate("/order-success");
     } catch (err) {
-      console.error("Error placing order:", err);
-      alert("⚠️ Something went wrong. Please try again later.");
+      console.error("❌ Order placement failed:", err.response?.data || err.message);
+      alert("🚨 Something went wrong while placing your order!");
+    } finally {
+      setLoading(false);
     }
   };
 
+  // --------------------------
+  // Render UI
+  // --------------------------
   return (
     <form className="place-order" onSubmit={handleSubmit}>
-      {/* Left side: Delivery form */}
       <div className="place-order-left">
         <p className="title">Delivery Information</p>
 
         <div className="multi-fields">
           <input
-            type="text"
+            required
             name="firstName"
             placeholder="First name"
             value={formData.firstName}
             onChange={handleChange}
-            required
           />
           <input
-            type="text"
+            required
             name="lastName"
             placeholder="Last name"
             value={formData.lastName}
             onChange={handleChange}
-            required
           />
         </div>
 
         <input
+          required
           type="email"
           name="email"
-          placeholder="Email address"
+          placeholder="Email"
           value={formData.email}
           onChange={handleChange}
-          required
         />
-
         <input
-          type="text"
+          required
           name="street"
           placeholder="Street"
           value={formData.street}
           onChange={handleChange}
-          required
         />
 
         <div className="multi-fields">
           <input
-            type="text"
+            required
             name="city"
             placeholder="City"
             value={formData.city}
             onChange={handleChange}
-            required
           />
           <input
-            type="text"
+            required
             name="state"
             placeholder="State"
             value={formData.state}
             onChange={handleChange}
-            required
           />
         </div>
 
         <div className="multi-fields">
           <input
-            type="text"
+            required
             name="zip"
             placeholder="Zip code"
             value={formData.zip}
             onChange={handleChange}
-            required
           />
           <input
-            type="text"
+            required
             name="country"
             placeholder="Country"
             value={formData.country}
             onChange={handleChange}
-            required
           />
         </div>
 
         <input
-          type="text"
+          required
           name="phone"
           placeholder="Phone number"
           value={formData.phone}
           onChange={handleChange}
-          required
         />
       </div>
 
-      {/* Right side: Cart summary */}
       <div className="place-order-right">
         <div className="cart-bottom">
           <h2>Cart Totals</h2>
 
-          {/* ✅ Show only valid medicines */}
           <div className="order-items">
-            {medicineList
-              .filter((med) => cartItems[med._id] > 0)
-              .map((med) => (
-                <div key={med._id} className="order-item">
+            {(medicine_list || [])
+              .filter((m) => (cartItems[m._id] || 0) > 0)
+              .map((m) => (
+                <div key={m._id} className="order-item">
                   <span>
-                    {med.name} × {cartItems[med._id]}
+                    {m.name} × {cartItems[m._id]}
                   </span>
                   <span>
-                    {currency}
-                    {med.price * cartItems[med._id]}
+                    {currency} {(m.price * cartItems[m._id]).toFixed(2)}
                   </span>
                 </div>
               ))}
           </div>
 
-          {/* Totals */}
           <div className="cart-totals-item">
             <p>Subtotal</p>
             <p>
-              {currency}
-              {subtotal}
+              {currency} {subtotal.toFixed(2)}
             </p>
           </div>
 
           <div className="cart-total-details">
             <p>Delivery Fee</p>
             <p>
-              {subtotal === 0
-                ? `${currency}0`
-                : `${currency}${deliveryCharge}`}
+              {subtotal
+                ? `${currency}${deliveryCharge.toFixed(2)}`
+                : `${currency}0.00`}
             </p>
           </div>
 
-          <div className="cart-total-details">
+          <div className="cart-total-details total">
             <b>Total</b>
             <b>
-              {currency}
-              {total}
+              {currency} {total.toFixed(2)}
             </b>
           </div>
 
-          <button type="submit" disabled={subtotal === 0}>
-            PROCEED TO PAYMENT
+          <button type="submit" disabled={!subtotal || loading}>
+            {loading ? "Processing..." : "PROCEED TO PAYMENT"}
           </button>
         </div>
       </div>

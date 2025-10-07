@@ -8,7 +8,7 @@ const Cart = () => {
   const { cartItems, removeFromCart } = useContext(StoreContext);
   const navigate = useNavigate();
 
-  const DELIVERY_FEE = 2;
+  const DELIVERY_FEE = 50;
 
   // Calculate total cart amount
   const getTotalCartAmount = () => {

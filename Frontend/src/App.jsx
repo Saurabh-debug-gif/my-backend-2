@@ -12,6 +12,9 @@ import PlaceOrder from "./pages/PlaceOrder/PlaceOrder";
 import Cart from "./pages/Cart/Cart";
 import Footer from "./components/Footer/Footer";
 import LoginPopup from "./components/LoginPopup/LoginPopup";
+import Verify from "./pages/Verify/Verify"; // Adjust path as per your folder structure
+import MyOrders from "./pages/MyOrders/MyOrders";
+
 
 const theme = createTheme({
   palette: {
@@ -43,6 +46,8 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/placeorder" element={<PlaceOrder />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/verify" element={<Verify />} />
+            <Route path="/myorders" element={<MyOrders />} />
           </Routes>
         </Container>
 

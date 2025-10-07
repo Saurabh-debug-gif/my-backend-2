@@ -7,10 +7,11 @@ const MedicineItem = ({ id, name, price, description, image }) => {
   const { cartItems, addToCart, removeFromCart } = useContext(StoreContext);
   const quantity = cartItems[id] ?? 0;
 
-  // Fallback if image fails
+  // fallback image if something goes wrong
   const handleImgError = (e) => {
-    console.warn("Image failed to load:", e.target.src);
-    e.target.src = assets.placeholder;
+    if (e.target.src !== assets.placeholder) {
+      e.target.src = assets.placeholder;
+    }
   };
 
   return (
@@ -18,7 +19,7 @@ const MedicineItem = ({ id, name, price, description, image }) => {
       <div className="medicine-item-img-container">
         <img
           className="medicine-item-img"
-          src={image}  
+          src={image}
           alt={name}
           onError={handleImgError}
         />
@@ -29,7 +30,6 @@ const MedicineItem = ({ id, name, price, description, image }) => {
             onClick={() => addToCart(id)}
             src={assets.add_icon_white}
             alt="Add"
-            style={{ cursor: "pointer" }}
           />
         ) : (
           <div className="medicine-item-add">
@@ -43,7 +43,7 @@ const MedicineItem = ({ id, name, price, description, image }) => {
       <div className="medicine-item-details">
         <p className="medicine-item-name">{name}</p>
         <p className="medicine-item-desc">{description}</p>
-        <p className="medicine-item-price">₹{price.toFixed(2)}</p>
+        <p className="medicine-item-price">₹{price?.toFixed(2)}</p>
       </div>
     </div>
   );

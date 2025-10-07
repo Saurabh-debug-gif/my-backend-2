@@ -45,12 +45,12 @@ const MedicineDisplay = () => {
         {filteredList.length > 0 ? (
           filteredList.map((item) => (
             <MedicineItem
-              key={item._id}
-              id={item._id}
+              key={item.id || item._id} // support both DB _id or manual id
+              id={item.id || item._id}
               name={item.name}
               price={item.price}
               description={item.description}
-              image={item.image}
+              image={item.image} // ✅ passes filename (e.g. medicine_1.png)
             />
           ))
         ) : (
@@ -64,3 +64,4 @@ const MedicineDisplay = () => {
 };
 
 export default MedicineDisplay;
+

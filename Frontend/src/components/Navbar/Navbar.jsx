@@ -117,8 +117,8 @@ const Navbar = ({ setShowLogin }) => {
                 transformOrigin={{ vertical: "top", horizontal: "right" }}
                 keepMounted
               >
-                <MenuItem component={Link} to="/orders" onClick={handleMenuClose}>
-                  <img src={assets.bag_icon} alt="Orders" style={{ width: 20, marginRight: 8 }} />
+                <MenuItem component={Link} to="/myorders" onClick={handleMenuClose}>
+                  <img src={assets.bag_icon} alt="orders" style={{ width: 20, marginRight: 8 }} />
                   Orders
                 </MenuItem>
                 <MenuItem onClick={handleLogout}>

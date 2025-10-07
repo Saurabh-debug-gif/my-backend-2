@@ -1,39 +1,29 @@
+// middleware/auth.js
 import jwt from "jsonwebtoken";
+import userModel from "../models/userModel.js";
 
-const authMiddleware = (req, res, next) => {
+export default async function auth(req, res, next) {
   try {
-    // 1. Get the Authorization header
-    const authHeader = req.headers["authorization"];
-
-    if (!authHeader) {
-      return res.status(401).json({ success: false, message: "Authorization header missing" });
+    const header = req.headers.authorization || req.headers.Authorization;
+    if (!header || !header.startsWith("Bearer ")) {
+      return res.status(401).json({ success: false, message: "No token provided" });
     }
 
-    // 2. Must be in the format: "Bearer <token>"
-    const parts = authHeader.split(" ");
-    if (parts.length !== 2 || parts[0].toLowerCase() !== "bearer") {
-      return res.status(401).json({ success: false, message: "Invalid Authorization header format" });
-    }
+    const token = header.split(" ")[1];
 
-    // 3. Extract token
-    const token = parts[1];
-
-    // 4. Verify token
+    // Verify JWT
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    if (!decoded || !decoded.id) {
-      return res.status(403).json({ success: false, message: "Invalid token payload" });
+    // Fetch user from DB
+    const user = await userModel.findById(decoded.id).select("-password");
+    if (!user) {
+      return res.status(401).json({ success: false, message: "User not found" });
     }
 
-    // 5. Attach userId from token → controller can use req.userId
-    req.userId = decoded.id;
-
-    // 6. Continue
+    req.user = user; // Attach user to request
     next();
-  } catch (error) {
-    console.error("Auth Error:", error.message);
-    return res.status(403).json({ success: false, message: "Invalid or expired token" });
+  } catch (err) {
+    console.error("Auth middleware error:", err?.message || err);
+    return res.status(401).json({ success: false, message: "Invalid token" });
   }
-};
-
-export default authMiddleware;
+}
